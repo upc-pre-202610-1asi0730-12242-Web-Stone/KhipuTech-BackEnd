@@ -25,7 +25,6 @@
       <Folder Include="Operation\Infrastructure\" />
       <Folder Include="Operation\Interfaces\" />
       <Folder Include="Shared\Application\Patterns\" />
-      <Folder Include="Shared\Domain\Model\" />
       <Folder Include="Shared\Domain\Repositories\" />
       <Folder Include="Shared\Infrastructure\" />
       <Folder Include="Shared\Interfaces\" />
