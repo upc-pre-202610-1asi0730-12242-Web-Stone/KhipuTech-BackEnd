@@ -9,6 +9,12 @@ using WebStone.Khiputech.Platform.Analytics.Application.QueryServices;
 using WebStone.Khiputech.Platform.Analytics.Application.Internal.QueryServices;
 using WebStone.Khiputech.Platform.Analytics.Domain.Repositories;
 using WebStone.Khiputech.Platform.Analytics.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using WebStone.Khiputech.Platform.Capacity.Application.CommandServices;
+using WebStone.Khiputech.Platform.Capacity.Application.Internal.CommandServices;
+using WebStone.Khiputech.Platform.Capacity.Application.Internal.QueryServices;
+using WebStone.Khiputech.Platform.Capacity.Application.QueryServices;
+using WebStone.Khiputech.Platform.Capacity.Domain.Repositories;
+using WebStone.Khiputech.Platform.Capacity.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using WebStone.Khiputech.Platform.Iam.Application.CommandServices;
 using WebStone.Khiputech.Platform.Iam.Application.Internal.CommandServices;
 using WebStone.Khiputech.Platform.Iam.Application.Internal.OutboundServices;
@@ -21,6 +27,18 @@ using WebStone.Khiputech.Platform.Iam.Infrastructure.Pipeline.Middleware.Extensi
 using WebStone.Khiputech.Platform.Iam.Infrastructure.Tokens.Jwt.Configuration;
 using WebStone.Khiputech.Platform.Iam.Infrastructure.Tokens.Jwt.Services;
 using WebStone.Khiputech.Platform.Iam.Resources;
+using WebStone.Khiputech.Platform.Maintenance.Application.CommandServices;
+using WebStone.Khiputech.Platform.Maintenance.Application.Internal.CommandServices;
+using WebStone.Khiputech.Platform.Maintenance.Application.Internal.QueryServices;
+using WebStone.Khiputech.Platform.Maintenance.Application.QueryServices;
+using WebStone.Khiputech.Platform.Maintenance.Domain.Repositories;
+using WebStone.Khiputech.Platform.Maintenance.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
+using WebStone.Khiputech.Platform.Operation.Application.CommandServices;
+using WebStone.Khiputech.Platform.Operation.Application.Internal.CommandServices;
+using WebStone.Khiputech.Platform.Operation.Application.Internal.QueryServices;
+using WebStone.Khiputech.Platform.Operation.Application.QueryServices;
+using WebStone.Khiputech.Platform.Operation.Domain.Repositories;
+using WebStone.Khiputech.Platform.Operation.Infrastructure.Persistence.EntityFrameworkCore.Repositories;
 using WebStone.Khiputech.Platform.Resources.Errors;
 using WebStone.Khiputech.Platform.Shared.Domain.Repositories;
 using WebStone.Khiputech.Platform.Shared.Infrastructure.Persistence.EntityFrameworkCore.Configuration;
@@ -151,6 +169,23 @@ builder.Services.AddScoped<IAnalyticsQueryService, AnalyticsQueryService>();
 // builder.Services.AddScoped<IArtworkStatRepository, ArtworkStatRepository>();
 // builder.Services.AddScoped<IVisitorStatRepository, VisitorStatRepository>();
 // builder.Services.AddScoped<ISponsorRepository, SponsorRepository>();
+
+// Capacity
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<ISensorRepository, SensorRepository>();
+builder.Services.AddScoped<ICapacityQueryService, CapacityQueryService>();
+builder.Services.AddScoped<ICapacityCommandService, CapacityCommandService>();
+
+// Operation
+builder.Services.AddScoped<IAlertRepository, AlertRepository>();
+builder.Services.AddScoped<IAlertConfigurationRepository, AlertConfigurationRepository>();
+builder.Services.AddScoped<IOperationQueryService, OperationQueryService>();
+builder.Services.AddScoped<IOperationCommandService, OperationCommandService>();
+
+// Maintenance
+builder.Services.AddScoped<IMaintenanceTaskRepository, MaintenanceTaskRepository>();
+builder.Services.AddScoped<IMaintenanceQueryService, MaintenanceQueryService>();
+builder.Services.AddScoped<IMaintenanceCommandService, MaintenanceCommandService>();
 
 // -----------------------------------------------------------------------------
 

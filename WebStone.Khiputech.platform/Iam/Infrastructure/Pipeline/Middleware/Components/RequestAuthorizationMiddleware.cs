@@ -10,8 +10,7 @@ public class RequestAuthorizationMiddleware(RequestDelegate next)
     public async Task InvokeAsync(
         HttpContext context,
         IUserQueryService userQueryService,
-        ITokenService tokenService,
-        CancellationToken cancellationToken)
+        ITokenService tokenService)
     {
         var endpoint = context.GetEndpoint();
         if (endpoint?.Metadata.GetMetadata<AllowAnonymousAttribute>() != null)
@@ -22,14 +21,23 @@ public class RequestAuthorizationMiddleware(RequestDelegate next)
 
         var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
         if (string.IsNullOrEmpty(token))
-            throw new UnauthorizedAccessException("Token missing");
+        {
+            context.Response.StatusCode = 401;
+            await context.Response.WriteAsync("Missing or invalid token.");
+            return;
+        }
 
+        // Usamos el cancellation token de la petición si es necesario
         var userId = await tokenService.ValidateToken(token);
         if (userId == null)
-            throw new UnauthorizedAccessException("Invalid token");
+        {
+            context.Response.StatusCode = 401;
+            await context.Response.WriteAsync("Invalid token.");
+            return;
+        }
 
         var query = new GetUserByIdQuery(userId.Value);
-        var user = await userQueryService.Handle(query, cancellationToken);
+        var user = await userQueryService.Handle(query, context.RequestAborted);
         context.Items["User"] = user;
 
         await next(context);
