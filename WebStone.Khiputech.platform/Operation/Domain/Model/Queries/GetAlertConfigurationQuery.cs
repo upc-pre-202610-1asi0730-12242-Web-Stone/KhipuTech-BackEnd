@@ -1,6 +1,3 @@
-namespace WebStone.Khiputech.platform.Operation.Domain.Model.Queries;
+namespace WebStone.Khiputech.Platform.Operation.Domain.Model.Queries;
 
-public class GetAlertConfigurationQuery
-{
-    
-}
+public record GetAlertConfigurationQuery();

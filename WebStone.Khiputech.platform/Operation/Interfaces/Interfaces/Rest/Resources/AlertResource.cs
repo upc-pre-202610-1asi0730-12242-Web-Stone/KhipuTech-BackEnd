@@ -1,6 +1,9 @@
-namespace WebStone.Khiputech.platform.Operation.Interfaces.Interfaces.Rest.Resources;
+namespace WebStone.Khiputech.Platform.Operation.Interfaces.Rest.Resources;
 
-public class AlertResource
-{
-    
-}
+public record AlertResource(
+    int Id,
+    string Sala,
+    string Tipo,
+    string Mensaje,
+    string Tiempo // formateado como "Hace X minutos"
+);

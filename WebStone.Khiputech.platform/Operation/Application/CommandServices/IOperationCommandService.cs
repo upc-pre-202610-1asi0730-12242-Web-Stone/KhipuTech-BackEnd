@@ -1,6 +1,10 @@
-namespace WebStone.Khiputech.platform.Operation.Application.CommandServices;
+using WebStone.Khiputech.Platform.Operation.Domain.Model.Commands;
 
-public class IOperationCommandService
+namespace WebStone.Khiputech.Platform.Operation.Application.CommandServices;
+
+public interface IOperationCommandService
 {
-    
+    Task Handle(CreateAlertCommand command, CancellationToken ct);
+    Task Handle(ResolveAlertCommand command, CancellationToken ct);
+    Task Handle(UpdateAlertConfigurationCommand command, CancellationToken ct);
 }

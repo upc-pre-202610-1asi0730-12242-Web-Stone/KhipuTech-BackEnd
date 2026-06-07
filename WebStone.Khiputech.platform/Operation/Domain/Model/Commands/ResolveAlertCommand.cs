@@ -1,6 +1,3 @@
-namespace WebStone.Khiputech.platform.Operation.Domain.Model.Commands;
+namespace WebStone.Khiputech.Platform.Operation.Domain.Model.Commands;
 
-public class ResolveAlertCommand
-{
-    
-}
+public record ResolveAlertCommand(int AlertId);

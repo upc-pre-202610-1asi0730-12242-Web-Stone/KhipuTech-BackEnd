@@ -1,6 +1,3 @@
-namespace WebStone.Khiputech.platform.Operation.Domain.Model.Commands;
+namespace WebStone.Khiputech.Platform.Operation.Domain.Model.Commands;
 
-public class CreateAlertCommand
-{
-    
-}
+public record CreateAlertCommand(string RoomName, string Type, string Message, string? TriggeredBy = null);

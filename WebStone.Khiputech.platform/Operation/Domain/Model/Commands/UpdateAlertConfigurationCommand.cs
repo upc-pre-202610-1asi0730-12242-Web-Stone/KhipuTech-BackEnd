@@ -1,6 +1,10 @@
-namespace WebStone.Khiputech.platform.Operation.Domain.Model.Commands;
+namespace WebStone.Khiputech.Platform.Operation.Domain.Model.Commands;
 
-public class UpdateAlertConfigurationCommand
-{
-    
-}
+public record UpdateAlertConfigurationCommand(
+    int ModerateThreshold,
+    int CriticalThreshold,
+    bool NotifyEmail,
+    bool NotifyWhatsApp,
+    bool NotifySms,
+    bool NotifyPanel,
+    string ContactCivilDefense);

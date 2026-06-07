@@ -1,6 +1,9 @@
-namespace WebStone.Khiputech.platform.Operation.Domain.Repositories;
+using WebStone.Khiputech.Platform.Operation.Domain.Model.Aggregates;
 
-public class IAlertConfigurationRepository
+namespace WebStone.Khiputech.Platform.Operation.Domain.Repositories;
+
+public interface IAlertConfigurationRepository
 {
-    
+    Task<AlertConfiguration?> GetAsync(CancellationToken ct);
+    void Update(AlertConfiguration config);
 }

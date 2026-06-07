@@ -1,6 +1,11 @@
-namespace WebStone.Khiputech.platform.Operation.Interfaces.Interfaces.Rest.Resources;
+namespace WebStone.Khiputech.Platform.Operation.Interfaces.Rest.Resources;
 
-public class AlertConfigurationResource
-{
-    
-}
+public record AlertConfigurationResource(
+    int UmbralModerada,
+    int UmbralCritica,
+    bool NotificacionesCorreo,
+    bool NotificacionesWhatsapp,
+    bool NotificacionesSms,
+    bool NotificacionesPanel,
+    string ContactoDefensaCivil
+);
