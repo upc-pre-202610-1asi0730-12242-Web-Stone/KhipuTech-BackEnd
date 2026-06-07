@@ -1,6 +1,9 @@
-namespace WebStone.Khiputech.platform.Maintenance.Application.CommandServices;
+using WebStone.Khiputech.Platform.Maintenance.Domain.Model.Commands;
 
-public class IMaintenanceCommandService
+namespace WebStone.Khiputech.Platform.Maintenance.Application.CommandServices;
+
+public interface IMaintenanceCommandService
 {
-    
+    Task Handle(ScheduleMaintenanceCommand command, CancellationToken ct);
+    Task Handle(RestoreArtworkAvailabilityCommand command, CancellationToken ct);
 }

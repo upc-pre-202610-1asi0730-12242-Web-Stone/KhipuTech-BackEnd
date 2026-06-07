@@ -1,6 +1,11 @@
-namespace WebStone.Khiputech.platform.Maintenance.Interfaces.Rest.Resources;
+namespace WebStone.Khiputech.Platform.Maintenance.Interfaces.Rest.Resources;
 
-public class MaintenanceTaskResource
-{
-    
-}
+public record MaintenanceTaskResource(
+    int Id,
+    int ArtworkId,
+    string ArtworkName,
+    string Reason,
+    string Status,
+    string? ScheduledBy,
+    DateTime ScheduledAt
+);

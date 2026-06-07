@@ -1,6 +1,20 @@
-namespace WebStone.Khiputech.platform.Maintenance.Interfaces.Rest.Transform;
+using WebStone.Khiputech.Platform.Maintenance.Domain.Model.Aggregates;
+using WebStone.Khiputech.Platform.Maintenance.Interfaces.Rest.Resources;
 
-public class MaintenanceTaskResourceFromEntityAssembler
+namespace WebStone.Khiputech.Platform.Maintenance.Interfaces.Rest.Transform;
+
+public static class MaintenanceTaskResourceFromEntityAssembler
 {
-    
+    public static MaintenanceTaskResource ToResourceFromEntity(MaintenanceTask task)
+    {
+        return new MaintenanceTaskResource(
+            task.Id,
+            task.ArtworkId,
+            task.ArtworkName,
+            task.Reason,
+            task.Status,
+            task.ScheduledBy,
+            task.ScheduledAt
+        );
+    }
 }
