@@ -1,6 +1,3 @@
-namespace WebStone.Khiputech.platform.Capacity.Domain.Model.Commands;
+namespace WebStone.Khiputech.Platform.Capacity.Domain.Model.Commands;
 
-public class UpdateRoomOccupancyCommand
-{
-    
-}
+public record UpdateRoomOccupancyCommand(int RoomId, int NewOccupancy);

@@ -1,6 +1,8 @@
+using WebStone.Khiputech.Platform.Capacity.Domain.Model.Aggregates;
+
 namespace WebStone.Khiputech.Platform.Capacity.Domain.Repositories;
 
-public class ISensorRepository
+public interface ISensorRepository
 {
-    
+    Task<IEnumerable<Sensor>> ListAsync(CancellationToken ct);
 }

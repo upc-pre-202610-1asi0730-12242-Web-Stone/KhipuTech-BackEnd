@@ -1,6 +1,8 @@
-namespace WebStone.Khiputech.platform.Capacity.Application.CommandServices;
+using WebStone.Khiputech.Platform.Capacity.Domain.Model.Commands;
 
-public class ICapacityCommandService
+namespace WebStone.Khiputech.Platform.Capacity.Application.CommandServices;
+
+public interface ICapacityCommandService
 {
-    
+    Task Handle(UpdateRoomOccupancyCommand command, CancellationToken ct);
 }

@@ -1,6 +1,3 @@
-namespace WebStone.Khiputech.platform.Capacity.Domain.Model.Queries;
+namespace WebStone.Khiputech.Platform.Capacity.Domain.Model.Queries;
 
-public class GetRoomsQuery
-{
-    
-}
+public record GetRoomsQuery();
