@@ -10,15 +10,25 @@ public class MaintenanceQueryService(IMaintenanceTaskRepository taskRepository) 
 {
     public async Task<IEnumerable<MaintenanceTaskResource>> Handle(GetMaintenanceTasksQuery query, CancellationToken ct)
     {
-        var tasks = await taskRepository.GetTasksAsync(query.Status, ct);
+        var tasks = await taskRepository.ListAsync(query.ActiveOnly, ct);
         return tasks.Select(MaintenanceTaskResourceFromEntityAssembler.ToResourceFromEntity);
     }
 
-    public async Task<IEnumerable<int>> Handle(GetBlockedArtworksQuery query, CancellationToken ct)
+    public async Task<MaintenanceTaskResource?> Handle(GetMaintenanceTaskByIdQuery query, CancellationToken ct)
     {
-        var activeTasks = await taskRepository.GetTasksAsync("pending", ct);
-        var inProgressTasks = await taskRepository.GetTasksAsync("in_progress", ct);
-        var blockedArtworkIds = activeTasks.Concat(inProgressTasks).Select(t => t.ArtworkId).Distinct();
-        return blockedArtworkIds;
+        var task = await taskRepository.FindByIdAsync(query.Id, ct);
+        return task != null ? MaintenanceTaskResourceFromEntityAssembler.ToResourceFromEntity(task) : null;
+    }
+
+    public async Task<IEnumerable<BlockedArtworkResource>> Handle(GetBlockedArtworksQuery query, CancellationToken ct)
+    {
+        var activeTasks = await taskRepository.ListAsync(true, ct);
+        return activeTasks.Select(t => new BlockedArtworkResource(
+            t.ArtworkId,
+            t.ArtworkName,
+            t.Reason,
+            t.EndDate
+        ));
     }
 }
+

@@ -6,5 +6,6 @@ namespace WebStone.Khiputech.Platform.Maintenance.Application.QueryServices;
 public interface IMaintenanceQueryService
 {
     Task<IEnumerable<MaintenanceTaskResource>> Handle(GetMaintenanceTasksQuery query, CancellationToken ct);
-    Task<IEnumerable<int>> Handle(GetBlockedArtworksQuery query, CancellationToken ct); // ids de obras bloqueadas
+    Task<MaintenanceTaskResource?> Handle(GetMaintenanceTaskByIdQuery query, CancellationToken ct);
+    Task<IEnumerable<BlockedArtworkResource>> Handle(GetBlockedArtworksQuery query, CancellationToken ct);
 }

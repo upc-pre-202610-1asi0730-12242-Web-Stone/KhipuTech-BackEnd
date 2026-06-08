@@ -11,44 +11,64 @@ namespace WebStone.Khiputech.Platform.Maintenance.Interfaces.Rest;
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces("application/json")]
-[SwaggerTag("Maintenance management (artwork conservation)")]
+[SwaggerTag("Artwork maintenance and restoration")]
 public class MaintenanceController(
     IMaintenanceQueryService queryService,
     IMaintenanceCommandService commandService) : ControllerBase
 {
     [HttpGet("tasks")]
-    [SwaggerOperation(Summary = "Get maintenance tasks, optionally filtered by status")]
-    public async Task<IActionResult> GetTasks([FromQuery] string? status, CancellationToken ct)
+    [SwaggerOperation(Summary = "Get all maintenance tasks (optional filter by active status)")]
+    public async Task<IActionResult> GetTasks([FromQuery] bool? activeOnly, CancellationToken ct)
     {
-        var result = await queryService.Handle(new GetMaintenanceTasksQuery(status), ct);
+        var result = await queryService.Handle(new GetMaintenanceTasksQuery(activeOnly), ct);
         return Ok(result);
     }
 
-    [HttpPost("tasks/schedule")]
-    [SwaggerOperation(Summary = "Schedule maintenance for an artwork")]
-    public async Task<IActionResult> ScheduleMaintenance([FromBody] ScheduleMaintenanceRequest request, CancellationToken ct)
+    [HttpGet("tasks/{id}")]
+    [SwaggerOperation(Summary = "Get a maintenance task by ID")]
+    public async Task<IActionResult> GetTaskById(int id, CancellationToken ct)
     {
-        var command = new ScheduleMaintenanceCommand(request.ArtworkId, request.ArtworkName, request.Reason, request.ScheduledBy);
-        await commandService.Handle(command, ct);
-        return Ok(new { message = "Maintenance scheduled successfully" });
-    }
-
-    [HttpPost("tasks/{taskId}/restore")]
-    [SwaggerOperation(Summary = "Restore artwork availability after maintenance is completed")]
-    public async Task<IActionResult> RestoreArtwork(int taskId, CancellationToken ct)
-    {
-        var command = new RestoreArtworkAvailabilityCommand(taskId);
-        await commandService.Handle(command, ct);
-        return Ok(new { message = "Artwork availability restored" });
+        var result = await queryService.Handle(new GetMaintenanceTaskByIdQuery(id), ct);
+        if (result == null) return NotFound();
+        return Ok(result);
     }
 
     [HttpGet("artworks/blocked")]
-    [SwaggerOperation(Summary = "Get IDs of artworks currently under maintenance")]
+    [SwaggerOperation(Summary = "Get all artworks currently under maintenance (QR/NFC blocked)")]
     public async Task<IActionResult> GetBlockedArtworks(CancellationToken ct)
     {
         var result = await queryService.Handle(new GetBlockedArtworksQuery(), ct);
         return Ok(result);
     }
-}
 
-public record ScheduleMaintenanceRequest(int ArtworkId, string ArtworkName, string Reason, string ScheduledBy);
+    [HttpPost("tasks/schedule")]
+    [SwaggerOperation(Summary = "Schedule a new maintenance task")]
+    public async Task<IActionResult> ScheduleMaintenance([FromBody] ScheduleMaintenanceRequest request, CancellationToken ct)
+    {
+        var command = new ScheduleMaintenanceCommand(
+            request.ArtworkId,
+            request.ArtworkName,
+            request.StartDate.ToUniversalTime(),
+            request.EndDate.ToUniversalTime(),
+            request.Reason
+        );
+        var task = await commandService.Handle(command, ct);
+        return CreatedAtAction(nameof(GetTaskById), new { id = task.Id }, task);
+    }
+
+    [HttpPost("artworks/{artworkId}/restore")]
+    [SwaggerOperation(Summary = "Restore an artwork after maintenance (complete the task)")]
+    public async Task<IActionResult> RestoreArtwork(int artworkId, CancellationToken ct)
+    {
+        await commandService.Handle(new RestoreArtworkCommand(artworkId), ct);
+        return NoContent();
+    }
+
+    [HttpPost("tasks/{taskId}/cancel")]
+    [SwaggerOperation(Summary = "Cancel a scheduled maintenance task")]
+    public async Task<IActionResult> CancelTask(int taskId, CancellationToken ct)
+    {
+        await commandService.Handle(new CancelMaintenanceCommand(taskId), ct);
+        return NoContent();
+    }
+}

@@ -187,6 +187,11 @@ builder.Services.AddScoped<IMaintenanceTaskRepository, MaintenanceTaskRepository
 builder.Services.AddScoped<IMaintenanceQueryService, MaintenanceQueryService>();
 builder.Services.AddScoped<IMaintenanceCommandService, MaintenanceCommandService>();
 
+// Maintenance
+builder.Services.AddScoped<IMaintenanceTaskRepository, MaintenanceTaskRepository>();
+builder.Services.AddScoped<IMaintenanceQueryService, MaintenanceQueryService>();
+builder.Services.AddScoped<IMaintenanceCommandService, MaintenanceCommandService>();
+
 // -----------------------------------------------------------------------------
 
 var app = builder.Build();

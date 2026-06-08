@@ -1,12 +1,8 @@
 namespace WebStone.Khiputech.Platform.Maintenance.Interfaces.Rest.Resources;
 
-public record MaintenanceTaskResource(
-    int Id,
+public record BlockedArtworkResource(
     int ArtworkId,
     string ArtworkName,
-    DateTime StartDate,
-    DateTime EndDate,
     string Reason,
-    string Status,
-    bool IsOverdue
+    DateTime EstimatedEndDate
 );

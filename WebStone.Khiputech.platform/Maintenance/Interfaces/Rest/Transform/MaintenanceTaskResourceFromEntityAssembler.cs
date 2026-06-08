@@ -11,10 +11,11 @@ public static class MaintenanceTaskResourceFromEntityAssembler
             task.Id,
             task.ArtworkId,
             task.ArtworkName,
+            task.StartDate,
+            task.EndDate,
             task.Reason,
             task.Status,
-            task.ScheduledBy,
-            task.ScheduledAt
+            task.IsOverdue
         );
     }
 }
