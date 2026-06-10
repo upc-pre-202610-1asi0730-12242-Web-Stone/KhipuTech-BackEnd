@@ -11,12 +11,20 @@ public class MaintenanceTaskRepository(AppDbContext context) : BaseRepository<Ma
     public async Task<MaintenanceTask?> FindByIdAsync(int id, CancellationToken ct)
         => await Context.Set<MaintenanceTask>().FirstOrDefaultAsync(t => t.Id == id, ct);
 
-    public async Task<IEnumerable<MaintenanceTask>> GetTasksAsync(string? status = null, CancellationToken ct = default)
+    public async Task<IEnumerable<MaintenanceTask>> ListAsync(bool? activeOnly, CancellationToken ct)
     {
         var query = Context.Set<MaintenanceTask>().AsQueryable();
-        if (!string.IsNullOrEmpty(status))
-            query = query.Where(t => t.Status == status);
-        return await query.OrderByDescending(t => t.ScheduledAt).ToListAsync(ct);
+        if (activeOnly == true)
+            query = query.Where(t => t.Status == "pending" || t.Status == "in_progress");
+        else if (activeOnly == false)
+            query = query.Where(t => t.Status == "completed" || t.Status == "cancelled");
+        return await query.OrderByDescending(t => t.CreatedAt).ToListAsync(ct);
+    }
+
+    public async Task<IEnumerable<int>> GetBlockedArtworkIdsAsync(CancellationToken ct)
+    {
+        var activeTasks = await ListAsync(true, ct);
+        return activeTasks.Select(t => t.ArtworkId);
     }
 
     public async Task AddAsync(MaintenanceTask task, CancellationToken ct)

@@ -4,14 +4,14 @@ public class MaintenanceTask
 {
     public MaintenanceTask() { }
 
-    public MaintenanceTask(int artworkId, string artworkName, string reason, string scheduledBy)
+    public MaintenanceTask(int artworkId, string artworkName, DateTime startDate, DateTime endDate, string reason)
     {
         ArtworkId = artworkId;
         ArtworkName = artworkName;
+        StartDate = startDate;
+        EndDate = endDate;
         Reason = reason;
-        ScheduledBy = scheduledBy;
-        Status = "pending"; // pending, in_progress, completed, cancelled
-        ScheduledAt = DateTime.UtcNow;
+        Status = "pending";
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
     }
@@ -19,33 +19,47 @@ public class MaintenanceTask
     public int Id { get; private set; }
     public int ArtworkId { get; private set; }
     public string ArtworkName { get; private set; } = string.Empty;
+    public DateTime StartDate { get; private set; }
+    public DateTime EndDate { get; private set; }
     public string Reason { get; private set; } = string.Empty;
     public string Status { get; private set; } = "pending";
-    public string? ScheduledBy { get; private set; }
-    public DateTime ScheduledAt { get; private set; }
-    public DateTime? CompletedAt { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
-    public void Start()
+    public bool IsActive => Status == "pending" || Status == "in_progress";
+    public bool IsOverdue => Status != "completed" && Status != "cancelled" && EndDate < DateTime.UtcNow;
+
+    public MaintenanceTask Start()
     {
-        if (Status != "pending") throw new InvalidOperationException("Only pending tasks can be started");
+        if (Status != "pending")
+            throw new InvalidOperationException("Only pending tasks can be started.");
         Status = "in_progress";
         UpdatedAt = DateTime.UtcNow;
+        return this;
     }
 
-    public void Complete()
+    public MaintenanceTask Complete()
     {
-        if (Status != "in_progress") throw new InvalidOperationException("Only in-progress tasks can be completed");
+        if (Status != "in_progress")
+            throw new InvalidOperationException("Only in-progress tasks can be completed.");
         Status = "completed";
-        CompletedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
+        return this;
     }
 
-    public void Cancel()
+    public MaintenanceTask Cancel()
     {
-        if (Status == "completed") throw new InvalidOperationException("Completed tasks cannot be cancelled");
+        if (Status == "completed")
+            throw new InvalidOperationException("Completed tasks cannot be cancelled.");
         Status = "cancelled";
+        UpdatedAt = DateTime.UtcNow;
+        return this;
+    }
+
+    public void UpdateDates(DateTime start, DateTime end)
+    {
+        StartDate = start;
+        EndDate = end;
         UpdatedAt = DateTime.UtcNow;
     }
 }
